@@ -1,0 +1,18 @@
+{
+  "name": "csaf-validator-service",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:typescript && npm run test:backend",
+    "test:typescript": "tsc -b .",
+    "test:backend": "cd backend && npm test",
+    "dev": "cd backend && npm run dev",
+    "preinstall": "npm run install:csaf-validator-lib && npm run install:backend",
+    "install:csaf-validator-lib": "cd csaf-validator-lib && npm ci",
+    "install:backend": "cd backend && npm ci"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1",
+    "typescript": "^4.6.2"
+  }
+}
