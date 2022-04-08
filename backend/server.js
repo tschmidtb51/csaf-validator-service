@@ -23,7 +23,7 @@ app.addHook('onClose', async (_instance, done) => {
   done()
 })
 
-app.listen(config.get('port'), '0.0.0.0', (err) => {
+app.listen(config.get('port'), config.get('ip'), (err) => {
   if (err) {
     app.log.error(err)
     process.exit(1)
