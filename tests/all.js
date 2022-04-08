@@ -16,16 +16,46 @@ const { csaf_2_0_strict, csaf_2_0 } = schemaTests
 const { expect } = chai
 
 describe('Core', () => {
+  describe('test naming', function () {
+    ;[
+      { name: 'Mandatory', prefix: 'mandatoryTest_', tests: mandatoryTests },
+      { name: 'Optional', prefix: 'optionalTest_', tests: optionalTests },
+      {
+        name: 'Informative',
+        prefix: 'informativeTest_',
+        tests: informativeTests,
+      },
+    ].forEach(({ name, prefix, tests }) => {
+      Object.entries(tests).forEach(([keyName, test], i, array) => {
+        it(`${name} test #${
+          i + 1
+        } (${keyName}) is named correctly`, function () {
+          expect(
+            array.findIndex(([, e]) => e.name === test.name) === i,
+            'has unique name'
+          ).to.be.true
+          expect(keyName === test.name, 'is named like its key').to.be.true
+          expect(keyName.startsWith(prefix), 'has a correct prefix').to.be.true
+        })
+      })
+    })
+  })
+
   describe('mandatoryTests', () => {
     documentTests.forEach((documentTest, i) => {
-      it(documentTest.title ?? `Mandatory Test #${i + 1}`, async () => {
+      const testTitle =
+        'title' in documentTest && typeof documentTest.title === 'string'
+          ? documentTest.title
+          : `Mandatory Test #${i + 1}`
+
+      it(testTitle, async () => {
         const result = await validate(
           [csaf_2_0, csaf_2_0_strict, ...Object.values(mandatoryTests)],
           documentTest.content
         )
         expect(result.isValid).to.equal(documentTest.valid)
         const errors = result.tests.flatMap((t) => t.errors)
-        if (typeof documentTest.expectedNumberOfErrors === 'number') {
+        if ('expectedNumberOfErrors' in documentTest) {
           expect(
             errors.length,
             'Document has the correct number of errors'
