@@ -1,10 +1,10 @@
-import minimalDoc from '../shared/minimalGenericCSAFDoc.js'
+import minimalDoc from '../shared/minimalCSAFBaseDoc.js'
 import minimalInformationalAdvisoryDoc from '../shared/minimalInformationalAdvisoryDoc.js'
 import minimalSecurityAdvisoryDoc from '../shared/minimalSecurityAdvisoryDoc.js'
 import minimalSecurityIncidentResponseDoc from '../shared/minimalSecurityIncidentResponseDoc.js'
 import minimalVexDoc from '../shared/minimalVexDoc.js'
 
-export default [
+export default /** @type {const} */ ([
   // Fails "6.1.3 Circular Definition of Product ID"
   {
     valid: false,
@@ -688,8 +688,8 @@ export default [
     },
   },
 
-  // Passes "6.1.16 Released Revision History"
   {
+    title: 'Mandatory Test 6.1.16 ignores build metadata',
     valid: true,
     content: {
       ...minimalDoc,
@@ -699,12 +699,12 @@ export default [
           ...minimalDoc.document.tracking,
           revision_history: [
             {
-              number: '2.0.0+123',
+              number: '1.0.0+123',
               date: '2021-01-14T00:00:00.000Z',
               summary: 'Summary',
             },
           ],
-          version: '2.0.0+234',
+          version: '1.0.0+234',
         },
       },
     },
@@ -1120,6 +1120,36 @@ export default [
     },
   },
 
+  {
+    title:
+      'Mandatory Test 6.1.21 detects invalid first revision history number',
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...minimalDoc,
+      document: {
+        ...minimalDoc.document,
+        tracking: {
+          ...minimalDoc.document.tracking,
+          revision_history: [
+            {
+              date: '2021-04-22T10:00:00.000Z',
+              number: '2',
+              summary: 'Initial version.',
+            },
+            {
+              date: '2021-07-21T10:00:00.000Z',
+              number: '3',
+              summary: 'Some other changes.',
+            },
+          ],
+          status: 'final',
+          version: '3',
+        },
+      },
+    },
+  },
+
   // Fails "6.1.22 Multiple Definition in Revision History"
   {
     valid: false,
@@ -1328,6 +1358,7 @@ export default [
 
   // Fails "6.1.25 Multiple Use of Same Hash Algorithm"
   {
+    title: 'Fails 6.1.25 Multiple Use of Same Hash Algorithm',
     valid: false,
     content: {
       ...minimalDoc,
@@ -1371,18 +1402,44 @@ export default [
 
   // Fails "6.1.26 Prohibited Document Category Name"
   ...[
+    'Csaf_a',
     'Security_Incident_Response',
     'Informational Advisory',
     'security-incident-response',
     'Security      Advisory',
     'veX',
+    'V_ex',
+    'V___eX',
     'Informational - Advisory',
     'security-_ incident-response',
     'Security\tAdvisory',
     'Security\nAdvisory',
     'Security\rAdvisory',
   ].map((category) => ({
+    title: `Fails "6.1.26 Prohibited Document Category Name" (category "${category}")`,
     valid: false,
+    content: {
+      ...minimalDoc,
+      document: {
+        ...minimalDoc.document,
+        category,
+      },
+    },
+  })),
+
+  // Succeeds "6.1.26 Prohibited Document Category Name"
+  ...[
+    'CSAF Base',
+    'csaf_base',
+    //    'csaf_security_incident_response',
+    //    'csaf_informational_advisory',
+    //    'csaf_security_advisory',
+    //    'csaf_vex',
+    'Example Company Security Advisory',
+    'CSAF Security Notice',
+  ].map((category) => ({
+    title: `Succeeds "6.1.26 Prohibited Document Category Name" (category "${category}")`,
+    valid: true,
     content: {
       ...minimalDoc,
       document: {
@@ -1399,7 +1456,7 @@ export default [
       ...minimalDoc,
       document: {
         ...minimalDoc.document,
-        category: 'vex',
+        category: 'csaf_vex',
       },
       product_tree: {
         full_product_names: [
@@ -1451,7 +1508,7 @@ export default [
       ...minimalDoc,
       document: {
         ...minimalDoc.document,
-        category: 'vex',
+        category: 'csaf_vex',
       },
       product_tree: {
         full_product_names: [
@@ -1503,7 +1560,7 @@ export default [
       ...minimalDoc,
       document: {
         ...minimalDoc.document,
-        category: 'vex',
+        category: 'csaf_vex',
       },
       product_tree: {
         full_product_names: [
@@ -1633,7 +1690,7 @@ export default [
   ...[minimalSecurityAdvisoryDoc, minimalVexDoc].map((doc) => ({
     title: `Fails "6.1.27.4 Product Tree" (category "${doc.document.category}")`,
     valid: false,
-    expectedNumberOfErrors: 1,
+    expectedNumberOfErrors: 2,
     content: {
       ...doc,
       product_tree: undefined,
@@ -1654,10 +1711,12 @@ export default [
           },
           ...(doc === minimalVexDoc
             ? {
-                id: {
-                  system_name: 'GitHub Issue',
-                  text: 'oasis-tcs/csaf#210',
-                },
+                ids: [
+                  {
+                    system_name: 'GitHub Issue',
+                    text: 'oasis-tcs/csaf#210',
+                  },
+                ],
               }
             : {}),
         },
@@ -1699,10 +1758,12 @@ export default [
               text: 'My note',
             },
           ],
-          id: {
-            system_name: 'GitHub Issue',
-            text: 'oasis-tcs/csaf#210',
-          },
+          ids: [
+            {
+              system_name: 'GitHub Issue',
+              text: 'oasis-tcs/csaf#210',
+            },
+          ],
         },
       ],
     },
@@ -1723,10 +1784,12 @@ export default [
               text: 'My note',
             },
           ],
-          id: {
-            system_name: 'GitHub Issue',
-            text: 'oasis-tcs/csaf#210',
-          },
+          ids: [
+            {
+              system_name: 'GitHub Issue',
+              text: 'oasis-tcs/csaf#210',
+            },
+          ],
           product_status: {
             first_fixed: ['CSAFPID-0001'],
             recommended: ['CSAFPID-0001'],
@@ -1758,4 +1821,295 @@ export default [
       ],
     },
   },
-]
+
+  ...[minimalSecurityAdvisoryDoc, minimalVexDoc].map((doc) => ({
+    title: `Fails "6.1.27.11 Vulnerabilities" (category "${doc.document.category}")`,
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...doc,
+      vulnerabilities: undefined,
+    },
+  })),
+
+  {
+    title: 'Mandatory Test 6.1.28 detects same source_lang and lang',
+    valid: false,
+    expectedNumberOfErrors: 2,
+    content: {
+      ...minimalDoc,
+      document: {
+        ...minimalDoc.document,
+        lang: 'en-US',
+        source_lang: 'en-US',
+      },
+    },
+  },
+
+  {
+    title:
+      'Mandatory Test 6.1.29 detects remediation without group_ids and product_ids',
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...minimalDoc,
+      vulnerabilities: [
+        {
+          remediations: [
+            {
+              category: 'no_fix_planned',
+              details:
+                'These products are end-of-life. Therefore, no fix will be provided.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    title: 'Mandatory Test 6.1.30 detects integer and semantic versioning',
+    valid: false,
+    expectedNumberOfErrors: 2,
+    content: {
+      ...minimalDoc,
+      document: {
+        ...minimalDoc.document,
+        tracking: {
+          ...minimalDoc.document.tracking,
+          revision_history: [
+            {
+              date: '2021-07-21T09:00:00.000Z',
+              number: '1.0.0',
+              summary: 'Initial version.',
+            },
+            {
+              date: '2021-07-21T10:00:00.000Z',
+              number: '2',
+              summary: 'Second version.',
+            },
+          ],
+          version: '2',
+        },
+      },
+    },
+  },
+
+  {
+    title: 'Mandatory Test 6.1.31 detects version range in product version',
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...minimalDoc,
+      product_tree: {
+        branches: [
+          {
+            category: 'product_version',
+            name: 'prior to 4.2',
+            product: {
+              product_id: 'CSAFPID-0001',
+              name: 'Some sample product',
+            },
+          },
+        ],
+      },
+    },
+  },
+
+  {
+    title:
+      'Mandatory Test 6.1.31 detects version range in product version (deep in tree)',
+    valid: false,
+    expectedNumberOfErrors: 2,
+    content: {
+      ...minimalDoc,
+      product_tree: {
+        branches: [
+          {
+            category: 'product_version',
+            name: 'later than 3.0',
+            branches: [
+              {
+                category: 'product_version',
+                name: 'prior to 4.2',
+                product: {
+                  product_id: 'CSAFPID-0002',
+                  name: 'Some other sample product',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  },
+
+  {
+    title: 'Mandatory Test 6.1.32 detects flag without product reference',
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...minimalDoc,
+      vulnerabilities: [
+        {
+          flags: [
+            {
+              label: 'component_not_present',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    title:
+      'Mandatory Test 6.1.33 detects multiple flags with vex justification codes per product',
+    valid: false,
+    expectedNumberOfErrors: 1,
+    content: {
+      ...minimalDoc,
+      product_tree: {
+        full_product_names: [
+          {
+            product_id: 'CSAFPID-9080700',
+            name: 'Product A',
+          },
+          {
+            product_id: 'CSAFPID-9080701',
+            name: 'Product B',
+          },
+        ],
+        product_groups: [
+          {
+            group_id: 'CSAFGID-0001',
+            product_ids: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        ],
+      },
+      vulnerabilities: [
+        {
+          flags: [
+            {
+              label: 'component_not_present',
+              group_ids: ['CSAFGID-0001'],
+            },
+            {
+              label: 'vulnerable_code_cannot_be_controlled_by_adversary',
+              product_ids: ['CSAFPID-9080700'],
+            },
+          ],
+          product_status: {
+            known_not_affected: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        },
+      ],
+    },
+  },
+
+  {
+    title:
+      'Mandatory Test 6.1.33 detects multiple flags with vex justification codes per product (multiple groups)',
+    valid: false,
+    expectedNumberOfErrors: 2,
+    content: {
+      ...minimalDoc,
+      product_tree: {
+        full_product_names: [
+          {
+            product_id: 'CSAFPID-9080700',
+            name: 'Product A',
+          },
+          {
+            product_id: 'CSAFPID-9080701',
+            name: 'Product B',
+          },
+        ],
+        product_groups: [
+          {
+            group_id: 'CSAFGID-0001',
+            product_ids: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+          {
+            group_id: 'CSAFGID-0002',
+            product_ids: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        ],
+      },
+      vulnerabilities: [
+        {
+          flags: [
+            {
+              label: 'component_not_present',
+              group_ids: ['CSAFGID-0001'],
+            },
+            {
+              label: 'component_not_present',
+              group_ids: ['CSAFGID-0002'],
+            },
+            {
+              label: 'vulnerable_code_cannot_be_controlled_by_adversary',
+              product_ids: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+            },
+          ],
+          product_status: {
+            known_not_affected: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        },
+      ],
+    },
+  },
+
+  {
+    title:
+      'Mandatory Test 6.1.33 does not evaluate multiple flags across vulnerabilities',
+    valid: true,
+    content: {
+      ...minimalDoc,
+      product_tree: {
+        full_product_names: [
+          {
+            product_id: 'CSAFPID-9080700',
+            name: 'Product A',
+          },
+          {
+            product_id: 'CSAFPID-9080701',
+            name: 'Product B',
+          },
+        ],
+        product_groups: [
+          {
+            group_id: 'CSAFGID-0001',
+            product_ids: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        ],
+      },
+      vulnerabilities: [
+        {
+          cve: 'CVE-2017-0145',
+          flags: [
+            {
+              label: 'component_not_present',
+              group_ids: ['CSAFGID-0001'],
+            },
+          ],
+          product_status: {
+            known_not_affected: ['CSAFPID-9080700', 'CSAFPID-9080701'],
+          },
+        },
+        {
+          cve: 'CVE-2020-44228',
+          flags: [
+            {
+              label: 'vulnerable_code_cannot_be_controlled_by_adversary',
+              product_ids: ['CSAFPID-9080700'],
+            },
+          ],
+          product_status: {
+            known_not_affected: ['CSAFPID-9080700'],
+          },
+        },
+      ],
+    },
+  },
+])
