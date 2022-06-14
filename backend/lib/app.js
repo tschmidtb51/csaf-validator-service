@@ -1,3 +1,5 @@
+process.title = "validService";
+
 /**
  * @param {import('fastify').FastifyInstance} fastify
  */

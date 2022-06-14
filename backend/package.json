@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test": "mocha tests",
-    "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js"
+    "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js",
+    "stop": "pkill --signal SIGINT validService"
   },
   "dependencies": {
     "close-with-grace": "^1.1.0",
