@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "cd backend && npm start",
     "test": "npm run test:typescript && npm run test:backend",
     "test:typescript": "tsc -b .",
     "test:backend": "cd backend && npm test",
