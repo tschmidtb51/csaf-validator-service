@@ -15,7 +15,9 @@ jobs:
       - run: npm start &
       - uses: ifaxity/wait-on-action@v1
         with:
-          resource: http://localhost:3000
+          delay: 1
+          timeout: 30000
+          resource: tcp:localhost:3000
       - run: npm run test-report && npm stop
       - name: Test Report
         uses: phoenix-actions/test-reporting@v8
