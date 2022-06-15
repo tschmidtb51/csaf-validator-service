@@ -12,11 +12,11 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: |
-          npm start &
-          sleep 2
-          npm run test-report
-          npm stop
+      - run: npm start &
+      - uses: ifaxity/wait-on-action@v1
+        with:
+          resource: http://localhost:3000
+      - run: npm run test-report && npm stop
       - name: Test Report
         uses: phoenix-actions/test-reporting@v8
         id: test-report
