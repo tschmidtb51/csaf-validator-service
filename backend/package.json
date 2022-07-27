@@ -5,8 +5,7 @@
   "scripts": {
     "test": "mocha tests",
     "test-report": "mocha tests --reporter json > test-results.json",
-    "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js",
-    "stop": "pkill --signal SIGINT validService"
+    "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js"
   },
   "dependencies": {
     "close-with-grace": "^1.1.0",
