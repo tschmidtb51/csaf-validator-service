@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha tests",
+    "test-report": "mocha tests --reporter json > test-results.json",
     "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js"
   },
   "dependencies": {

@@ -1,0 +1,29 @@
+name: Run Tests
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm start &
+      - uses: ifaxity/wait-on-action@v1
+        with:
+          delay: 1
+          timeout: 30000
+          resource: tcp:localhost:8082
+      - run: npm run test-report
+      - name: Test Report
+        uses: phoenix-actions/test-reporting@v8
+        id: test-report
+        if: success() || failure()
+        with:
+          name: Mocha Tests
+          path: backend/test-results.json
+          reporter: mocha-json

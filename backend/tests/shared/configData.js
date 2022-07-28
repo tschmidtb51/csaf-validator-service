@@ -1,5 +1,5 @@
 export function getConfig() {
   return {
-    port: 3000,
+    port: 8082,
   }
 }
