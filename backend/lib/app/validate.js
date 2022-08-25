@@ -150,6 +150,8 @@ export default async function (fastify) {
                   (t) => Boolean(t)
                 )
           )
+
+          // Filter duplicated tests
           .filter(
             (test, i, array) =>
               array.findIndex((a) => a.name === test.name) === i
