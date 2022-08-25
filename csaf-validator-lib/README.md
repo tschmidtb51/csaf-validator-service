@@ -24,10 +24,11 @@ This JavaScript library is intended to include logic that can be shared across a
 
 ## Getting Started
 
-Currently, there is no npm package. You can include this library as a 
+Currently, there is no npm package. You can include this library as a
 subtree in your repository. After that you can reference the modules from within your JavaScript application.
 
 - include as git subtree
+
   ```sh
   git subtree add --prefix csaf-validator-lib https://github.com/secvisogram/csaf-validator-lib.git main --squash
   ```
@@ -42,21 +43,20 @@ subtree in your repository. After that you can reference the modules from within
 ## How to use
 
 - example usage
+
   ```js
   import validate from '../csaf-validator-lib/validate.js'
-  
-  const document = '{}'
+  import * as mandatory from '../csaf-validator-lib/mandatoryTests.js'
+  import { optionalTest_6_2_1 } from '../csaf-validator-lib/optionalTests.js'
+  import { csaf_2_0_strict } from './schemaTests.js'
+
+  const document = {}
   const tests = [
-    {
-      type: 'preset',
-      name: 'mandatory'
-    },
-    {
-      type: 'test',
-      name: 'optionalTest_6_2_1'
-    }
+    csaf_2_0_strict,
+    ...Object.values(mandatory),
+    optionalTest_6_2_1,
   ]
-  
+
   const result = await validate(tests, document)
   ```
 
@@ -113,6 +113,7 @@ export const mandatoryTest_6_1_4: DocumentTest
 export const mandatoryTest_6_1_5: DocumentTest
 export const mandatoryTest_6_1_6: DocumentTest
 export const mandatoryTest_6_1_7: DocumentTest
+export const mandatoryTest_6_1_8: DocumentTest
 export const mandatoryTest_6_1_9: DocumentTest
 export const mandatoryTest_6_1_10: DocumentTest
 export const mandatoryTest_6_1_11: DocumentTest
@@ -168,6 +169,13 @@ export const optionalTest_6_2_10: DocumentTest
 export const optionalTest_6_2_11: DocumentTest
 export const optionalTest_6_2_12: DocumentTest
 export const optionalTest_6_2_13: DocumentTest
+export const optionalTest_6_2_14: DocumentTest
+export const optionalTest_6_2_15: DocumentTest
+export const optionalTest_6_2_16: DocumentTest
+export const optionalTest_6_2_17: DocumentTest
+export const optionalTest_6_2_18: DocumentTest
+export const optionalTest_6_2_19: DocumentTest
+export const optionalTest_6_2_20: DocumentTest
 ```
 
 [(back to top)](#bsi-csaf-validator-lib)
@@ -182,6 +190,10 @@ export const informativeTest_6_3_4: DocumentTest
 export const informativeTest_6_3_5: DocumentTest
 export const informativeTest_6_3_6: DocumentTest
 export const informativeTest_6_3_7: DocumentTest
+export const informativeTest_6_3_8: DocumentTest
+export const informativeTest_6_3_9: DocumentTest
+export const informativeTest_6_3_10: DocumentTest
+export const informativeTest_6_3_11: DocumentTest
 ```
 
 [(back to top)](#bsi-csaf-validator-lib)
@@ -232,7 +244,7 @@ export const weaknesses: Array<{ id: string; name: string }>
 
 ## Testing
 
-Tests are implemented using [mocha](https://mochajs.org/). They can be run using the following command:
+Tests are implemented using [mocha](https://mochajs.org/). The minimal supported Node.js version is **14**. They can be run using the following command:
 
 ```sh
 npm test
