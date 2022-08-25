@@ -40,6 +40,13 @@ The project uses the [config](https://www.npmjs.com/package/config) npm package 
 
 [(back to top)](#bsi-secvisogram-csaf-validator-service)
 
+## Using in production
+
+1. Install production dependencies using `npm ci --omit=dev` from within the `backend` folder
+2. Transfer the `backend` folder to your server or image
+3. Make sure to set the environment variable `NODE_ENV` to `production
+4. Configure the service using a `local-production.json` file in `backend/config`. All available parameters are outlined in `backend/config/development.json`. See [https://www.npmjs.com/package/config](https://www.npmjs.com/package/config) for more information on how to configure using different techniques such as environment variables.
+
 ## Developing
 
 ### Prerequisites
