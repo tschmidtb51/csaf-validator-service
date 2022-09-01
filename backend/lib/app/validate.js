@@ -4,6 +4,22 @@ import * as optionalTests from '../../../csaf-validator-lib/optionalTests.js'
 import * as informativeTests from '../../../csaf-validator-lib/informativeTests.js'
 import validate from '../../../csaf-validator-lib/validate.js'
 
+/** @type {Record<string, Parameters<typeof validate>[0][number] | undefined>} */
+const tests = Object.fromEntries(
+  /** @type {Array<[string, any]>} */ (Object.entries(schemaTests))
+    .concat(Object.entries(mandatoryTests))
+    .concat(Object.entries(optionalTests))
+    .concat(Object.entries(informativeTests))
+)
+
+/** @type {Record<string, Parameters<typeof validate>[0] | undefined>} */
+const presets = {
+  schema: Object.values(schemaTests),
+  mandatory: Object.values(mandatoryTests),
+  optional: Object.values(optionalTests),
+  informative: Object.values(informativeTests),
+}
+
 /** @typedef {Parameters<typeof validate>[0][number]} DocumentTest */
 
 const swaggerInfo = {
@@ -20,12 +36,24 @@ const requestBodySchema = {
     tests: {
       type: 'array',
       items: {
-        type: 'object',
-        required: ['name', 'type'],
-        properties: {
-          name: { type: 'string' },
-          type: { type: 'string', enum: ['preset', 'test'] },
-        },
+        oneOf: [
+          {
+            type: 'object',
+            required: ['name', 'type'],
+            properties: {
+              name: { type: 'string', enum: Object.keys(tests) },
+              type: { type: 'string', enum: ['test'] },
+            },
+          },
+          {
+            type: 'object',
+            required: ['name', 'type'],
+            properties: {
+              name: { type: 'string', enum: Object.keys(presets) },
+              type: { type: 'string', enum: ['preset'] },
+            },
+          },
+        ],
       },
     },
     document: {
@@ -89,22 +117,6 @@ const responseSchema = {
   },
 }
 
-/** @type {Record<string, Parameters<typeof validate>[0][number] | undefined>} */
-const tests = Object.fromEntries(
-  /** @type {Array<[string, any]>} */ (Object.entries(schemaTests))
-    .concat(Object.entries(mandatoryTests))
-    .concat(Object.entries(optionalTests))
-    .concat(Object.entries(informativeTests))
-)
-
-/** @type {Record<string, Parameters<typeof validate>[0] | undefined>} */
-const presets = {
-  schema: Object.values(schemaTests),
-  mandatory: Object.values(mandatoryTests),
-  optional: Object.values(optionalTests),
-  informative: Object.values(informativeTests),
-}
-
 /**
  * @param {import('fastify').FastifyInstance} fastify
  */
@@ -138,6 +150,8 @@ export default async function (fastify) {
                   (t) => Boolean(t)
                 )
           )
+
+          // Filter duplicated tests
           .filter(
             (test, i, array) =>
               array.findIndex((a) => a.name === test.name) === i
