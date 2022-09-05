@@ -24,6 +24,8 @@ To run the validator service you basically need the same as for [developing](#de
 
 - install Node.js 16
 - install dependencies with `npm ci`
+- test 6.3.8 requires an installation of hunspell.
+  - For more details on how to manage languages, please also see [Managing Hunspell languages](https://github.com/secvisogram/csaf-validator-lib#managing-hunspell-languages)
 - run `npm run start`
 
 ## Documentation
