@@ -4,6 +4,10 @@ import * as schemaTests from '../../csaf-validator-lib/schemaTests.js'
 import * as mandatoryTests from '../../csaf-validator-lib/mandatoryTests.js'
 import * as optionalTests from '../../csaf-validator-lib/optionalTests.js'
 import * as informativeTests from '../../csaf-validator-lib/informativeTests.js'
+import * as basic from '../../csaf-validator-lib/basic.js'
+import * as extended from '../../csaf-validator-lib/extended.js'
+import * as full from '../../csaf-validator-lib/full.js'
+import validate from '../../csaf-validator-lib/validate.js'
 import { getConfig } from './shared/configData.js'
 import { getValidSampleDocuments } from './shared/sampleDocumentsData.js'
 
@@ -13,6 +17,25 @@ const agent = new Agent({
 })
 
 setGlobalDispatcher(agent)
+
+/** @type {Record<string, Parameters<typeof validate>[0][number]>} */
+const tests = Object.fromEntries(
+  /** @type {Array<[string, any]>} */ (Object.entries(schemaTests))
+    .concat(Object.entries(mandatoryTests))
+    .concat(Object.entries(optionalTests))
+    .concat(Object.entries(informativeTests))
+)
+
+/** @type {Record<string, Parameters<typeof validate>[0]>} */
+const presets = {
+  schema: Object.values(schemaTests),
+  mandatory: Object.values(mandatoryTests),
+  optional: Object.values(optionalTests),
+  informative: Object.values(informativeTests),
+  basic: Object.values(basic),
+  extended: Object.values(extended),
+  full: Object.values(full),
+}
 
 describe('API', function () {
   describe('GET /api/v1/tests', function () {
@@ -93,6 +116,80 @@ describe('API', function () {
               })),
             ],
             isValid: true,
+          })
+        })
+      }
+    })
+
+    describe('can execute all tests independently', function () {
+      for (const [name, test] of Object.entries(tests)) {
+        it(`test=${name}`, async function () {
+          const doc = {}
+          const requestBody = JSON.stringify({
+            tests: [{ type: 'test', name }],
+            document: doc,
+          })
+          const res = await request(
+            'http://localhost:' + getConfig().port + '/api/v1/validate',
+            {
+              method: 'POST',
+              body: requestBody,
+              headers: {
+                'content-length': Buffer.byteLength(requestBody).toString(),
+                'content-type': 'application/json',
+              },
+            }
+          )
+          const body = await res.body.json()
+
+          expect(res.statusCode).to.equal(200)
+          const result = await validate([test], doc)
+          expect(body).to.deep.equal({
+            ...result,
+            tests: result.tests.map((t) => ({
+              ...t,
+              errors: t.errors.map((e) => ({
+                instancePath: e.instancePath,
+                message: e.message,
+              })),
+            })),
+          })
+        })
+      }
+    })
+
+    describe('can execute all presets independently', function () {
+      for (const [name, preset] of Object.entries(presets)) {
+        it(`preset=${name}`, async function () {
+          const doc = {}
+          const requestBody = JSON.stringify({
+            tests: [{ type: 'preset', name }],
+            document: doc,
+          })
+          const res = await request(
+            'http://localhost:' + getConfig().port + '/api/v1/validate',
+            {
+              method: 'POST',
+              body: requestBody,
+              headers: {
+                'content-length': Buffer.byteLength(requestBody).toString(),
+                'content-type': 'application/json',
+              },
+            }
+          )
+          const body = await res.body.json()
+
+          expect(res.statusCode).to.equal(200)
+          const result = await validate(preset, doc)
+          expect(body).to.deep.equal({
+            ...result,
+            tests: result.tests.map((t) => ({
+              ...t,
+              errors: t.errors.map((e) => ({
+                instancePath: e.instancePath,
+                message: e.message,
+              })),
+            })),
           })
         })
       }

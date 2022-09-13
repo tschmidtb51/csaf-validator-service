@@ -2,6 +2,9 @@ import * as schemaTests from '../../../csaf-validator-lib/schemaTests.js'
 import * as mandatoryTests from '../../../csaf-validator-lib/mandatoryTests.js'
 import * as optionalTests from '../../../csaf-validator-lib/optionalTests.js'
 import * as informativeTests from '../../../csaf-validator-lib/informativeTests.js'
+import * as basic from '../../../csaf-validator-lib/basic.js'
+import * as extended from '../../../csaf-validator-lib/extended.js'
+import * as full from '../../../csaf-validator-lib/full.js'
 import validate from '../../../csaf-validator-lib/validate.js'
 
 /** @type {Record<string, Parameters<typeof validate>[0][number] | undefined>} */
@@ -18,6 +21,9 @@ const presets = {
   mandatory: Object.values(mandatoryTests),
   optional: Object.values(optionalTests),
   informative: Object.values(informativeTests),
+  basic: Object.values(basic),
+  extended: Object.values(extended),
+  full: Object.values(full),
 }
 
 /** @typedef {Parameters<typeof validate>[0][number]} DocumentTest */
