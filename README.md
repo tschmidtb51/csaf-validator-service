@@ -1,17 +1,21 @@
 # BSI CSAF Validator Lib
 
 - [About The Project](#about-the-project)
-- [Getting started](#getting-started)
+- [Getting Started](#getting-started)
 - [How to use](#how-to-use)
-  - [Api](#api)
+  - [Strict Mode](#strict-mode)
+  - [API](#api)
     - [Interfaces](#interfaces)
-    - [Module schemaTests.js](#module-schematestsjs)
-    - [Module mandatoryTests.js](#module-mandatorytestsjs)
-    - [Module optionalTests.js](#module-optionaltestsjs)
-    - [Module informativeTests.js](#module-informativetestsjs)
-    - [Module validate.js](#module-validatejs)
-    - [Module strip.js](#module-stripjs)
-    - [Module cwe.js](#module-cwejs)
+    - [Module `schemaTests.js`](#module-schematestsjs)
+    - [Module `mandatoryTests.js`](#module-mandatorytestsjs)
+    - [Module `optionalTests.js`](#module-optionaltestsjs)
+    - [Module `informativeTests.js`](#module-informativetestsjs)
+    - [Module `basic.js`](#module-basicjs)
+    - [Module `extended.js`](#module-extendedjs)
+    - [Module `full.js`](#module-fulljs)
+    - [Module `validate.js`](#module-validatejs)
+    - [Module `strip.js`](#module-stripjs)
+    - [Module `cwe.js`](#module-cwejs)
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [Dependencies](#dependencies)
@@ -38,6 +42,32 @@ subtree in your repository. After that you can reference the modules from within
   cd csaf-validator-lib && npm ci --prod
   ```
 
+- For test 6.3.8 an installation of hunspell as well as all languages that 
+  you want to spell check is required.
+
+### Managing Hunspell languages
+
+A CSAF Document can contain a [language](https://docs.oasis-open.org/csaf/csaf/v2.0/cs02/csaf-v2.0-cs02.html#3216-document-property---language).
+For example, valid entries could be `en` or `en-US`. When running test 6.3.8 we
+try to match this language to the list of installed hunspell languages. If the 
+region is specified (like in `en-US`) and the corresponding language is
+installed the test will run. If you want/need to check a `en` language
+specifically with `en-US` (or any other variant) you need to make sure that you
+link `en` to `en-US` using a symlink.
+
+Example of linking `en` to `en-US`:
+```sh
+ln -s /usr/share/hunspell/en_US.aff /usr/share/hunspell/en.aff
+ln -s /usr/share/hunspell/en_US.dic /usr/share/hunspell/en.dic
+```
+
+You can find out what languages you have installed by running `hunspell -D`.
+
+If you need additional languages they are most likely available in the 
+repository of your distribution. If you have a custom dictionary
+copy them in the directory provided by the command above. Hunspell should 
+automatically recognize them.
+
 [(back to top)](#bsi-csaf-validator-lib)
 
 ## How to use
@@ -62,6 +92,14 @@ subtree in your repository. After that you can reference the modules from within
 
 [(back to top)](#bsi-csaf-validator-lib)
 
+### Strict Mode
+
+In the default setting, the library checks whether the test that should be executed was defined in the library. Otherwise, it throws an error.
+To extend the library, that check can be turned off. In such case, **the calling function is responsible for checking** whether the test function passed to the `csaf-validator-lib` is benign. **Calling arbitrary** functions (especially those resulting from user input) may result in a **code execution vulnerability**. Therefore, the check of the test function to determine whether it is benign **MUST be done before calling** it.
+To proceed this dangerous path, set `strict = false`.
+
+[(back to top)](#bsi-csaf-validator-lib)
+
 ### API
 
 #### Interfaces
@@ -70,7 +108,7 @@ subtree in your repository. After that you can reference the modules from within
 interface Result {
   isValid: boolean
   warnings: Array<{ message: string; instancePath: string }>
-  errors: Array<{ message?: string; instancePath: string }>
+  errors: Array<{ message: string; instancePath: string }>
   infos: Array<{ message: string; instancePath: string }>
 }
 ```
@@ -79,7 +117,7 @@ interface Result {
 interface TestResult {
   isValid?: boolean
   warnings?: Array<{ message: string; instancePath: string }>
-  errors?: Array<{ message?: string; instancePath: string }>
+  errors?: Array<{ message: string; instancePath: string }>
   infos?: Array<{ message: string; instancePath: string }>
 }
 ```
@@ -198,12 +236,33 @@ export const informativeTest_6_3_11: DocumentTest
 
 [(back to top)](#bsi-csaf-validator-lib)
 
+#### Module `basic.js`
+
+This module exports the strict schema test and all mandatory tests except `6.1.8`.
+
+[(back to top)](#bsi-csaf-validator-lib)
+
+#### Module `extended.js`
+
+This module exports all tests included in `basic.js` and all optional tests.
+
+[(back to top)](#bsi-csaf-validator-lib)
+
+#### Module `full.js`
+
+This module exports all tests included in `extended.js` and all informative tests.
+
+[(back to top)](#bsi-csaf-validator-lib)
+
 #### Module `validate.js`
+
+This function validates the given document against the given tests. The `strict` option (default `true`) throws an error if an unknown test function was passed. See [Strict Mode](#strict-mode) for more details.
 
 ```typescript
 type ValidateFn = (
   tests: DocumentTest[],
-  document: any
+  document: any,
+  options?: { strict?: boolean }
 ) => Promise<{
   tests: Array<{ name: string } & Result>
   isValid: boolean
@@ -216,10 +275,13 @@ export default ValidateFn
 
 #### Module `strip.js`
 
+This function strips empty nodes and nodes with errors. The `strict` option (default `true`) throws an error if an unknown test function was passed. See [Strict Mode](#strict-mode) for more details.
+
 ```typescript
 type StripFn = (
   tests: DocumentTest[],
-  document: any
+  document: any,
+  options?: { strict?: boolean }
 ) => Promise<{
   document: any
   strippedPaths: {

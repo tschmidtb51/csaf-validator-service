@@ -170,13 +170,14 @@ describe('Core', () => {
               return {
                 isValid,
                 errors:
-                  /** @type {{ message?: string | undefined; instancePath: string; }[]} */ (
+                  /** @type {{ message: string; instancePath: string; }[]} */ (
                     schemaValidator.errors ?? []
                   ),
               }
             },
           ],
-          { title: 4 }
+          { title: 4 },
+          { strict: false }
         )
 
         expect(result.document).to.deep.equal({})
@@ -198,13 +199,14 @@ describe('Core', () => {
               return {
                 isValid,
                 errors:
-                  /** @type {{ message?: string | undefined; instancePath: string; }[]} */ (
+                  /** @type {{ message: string; instancePath: string; }[]} */ (
                     schemaValidator.errors ?? []
                   ),
               }
             },
           ],
-          { title: '' }
+          { title: '' },
+          { strict: false }
         )
 
         expect(result.document).to.deep.equal({})
