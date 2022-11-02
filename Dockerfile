@@ -1,17 +1,26 @@
-FROM node:current-alpine
-# Add git (required)
-RUN apk add --no-cache git
-# Set the Workdir, this will also create the folder if not yet existing. All following commands will be called from this folder
-WORKDIR /home/node/app
-# Workdir is owned by root and other users do not have access by default 
-RUN chown -R node:node /home/node/app
-# Switch to node, that all following commands are executed as such
-USER node
-# Clone repo to /home/node/app
-RUN git clone https://github.com/secvisogram/csaf-validator-service.git .
-# Ensure all files are owned by node
-RUN chown -R node:node .
-# Install as described in the Readme
-RUN npm ci
-# Call final command to start the service. Use Entrypoint to make sure this command is always executed and not replaced by arguments
-ENTRYPOINT [ "npm", "run", "dev" ]
+# Build Stage 1
+# This build created a staging docker image
+#
+
+FROM node:18-alpine AS appbuild
+WORKDIR /usr/src
+RUN apk add git; \
+    git clone https://github.com/secvisogram/csaf-validator-service.git; \
+    cd csaf-validator-service; \
+    npm ci; \
+    npm run dist
+
+# Build Stage 2
+# This build takes the production build from staging build
+#
+
+FROM node:18-alpine
+WORKDIR /usr/src/app
+RUN apk add hunspell hunspell-en hunspell-de-de 
+ENV NODE_ENV=production
+COPY --from=appbuild /usr/src/csaf-validator-service/dist /usr/src/app
+COPY config/local-production.json /usr/src/app/config/local-production.json
+#This have to be checked
+#USER node
+EXPOSE 8082
+CMD [ "node", "backend/server.js" ]
