@@ -21,7 +21,7 @@ RUN apk add hunspell hunspell-en hunspell-de-de \
 	ln -s /usr/share/hunspell/ede_DE.dic /usr/share/hunspell/de.dic 
 ENV NODE_ENV=production
 COPY --from=appbuild /usr/src/csaf-validator-service/dist /usr/src/app
-COPY config/local-production.json /usr/src/app/config/local-production.json
+COPY ./backend/config/development.json /usr/src/app/config/local-production.json
 
 USER node
 EXPOSE 8082
