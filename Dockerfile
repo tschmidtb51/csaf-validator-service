@@ -14,7 +14,7 @@ RUN npm ci; \
 
 FROM node:18-alpine
 WORKDIR /usr/src/app
-RUN apk add hunspell hunspell-en hunspell-de-de \
+RUN apk add hunspell hunspell-en hunspell-de-de; \
 	ln -s /usr/share/hunspell/en_US.aff /usr/share/hunspell/en.aff; \
 	ln -s /usr/share/hunspell/en_US.dic /usr/share/hunspell/en.dic; \
 	ln -s /usr/share/hunspell/de_DE.aff /usr/share/hunspell/de.aff; \
