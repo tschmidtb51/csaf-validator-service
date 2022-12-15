@@ -4,6 +4,7 @@ import config from 'config'
 
 const app = Fastify({
   logger: true,
+    bodyLimit: 10048576
 })
 
 app.register(import('./lib/app.js'))
