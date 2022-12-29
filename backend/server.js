@@ -3,8 +3,8 @@ import closeWithGrace from 'close-with-grace'
 import config from 'config'
 
 const app = Fastify({
-  logger: true,
-    bodyLimit: 10048576
+    logger: true,
+    bodyLimit: config.get('bodyLimit')
 })
 
 app.register(import('./lib/app.js'))
