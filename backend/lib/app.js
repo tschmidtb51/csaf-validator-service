@@ -1,3 +1,5 @@
+import { getHunspellAvailableLangs } from '../../csaf-validator-lib/hunspell.js'
+
 /**
  * @param {import('fastify').FastifyInstance} fastify
  */
@@ -25,4 +27,17 @@ export default async function (fastify) {
   })
   fastify.register(import('./app/getTests.js'))
   fastify.register(import('./app/validate.js'))
+  getHunspellAvailableLangs().then(
+    (availableLangs) => {
+      fastify.log.info(
+        'Installation of hunspell found! Available languages: ' +
+          availableLangs.join(', ')
+      )
+    },
+    () => {
+      fastify.log.warn(
+        'No installation of hunspell found, test 6.3.8 is not available!'
+      )
+    }
+  )
 }
