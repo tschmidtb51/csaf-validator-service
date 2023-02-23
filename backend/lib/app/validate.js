@@ -30,7 +30,7 @@ const presets = {
 
 const swaggerInfo = {
   description:
-    'This endpoint is intended to validate a document against the specified tests.',
+    'This endpoint is intended to validate a document against the specified tests. In the list of tests provide at least one object, where each object is used to run either a single test or an entire preset. For \'name\' provide the test\'s or the preset\'s name, and as \'type\' provide accordingly either \'test\' or \'preset\'. For the value of the property \'document\' just provide the json of your CSAF document.',
   summary: 'Validate document.',
 }
 
