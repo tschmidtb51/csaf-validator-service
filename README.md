@@ -106,6 +106,20 @@ npm test
 
 [(back to top)](#bsi-secvisogram-csaf-validator-service)
 
+## Docker
+
+Build docker image
+
+```sh
+docker build -t csaf/validator-service .
+```
+
+Start container
+
+```sh
+docker run -d -p 8082:8082 --name csaf-validator-service csaf/validator-service
+```
+
 ## Contributing
 
 You can find our guidelines here [CONTRIBUTING.md](https://github.com/secvisogram/secvisogram/blob/main/CONTRIBUTING.md)
