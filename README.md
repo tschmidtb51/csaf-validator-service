@@ -100,7 +100,7 @@ npm test
 Build docker image
 
 ```sh
-docker build -t csaf/validator-service:1.0.0 .
+docker build -t csaf/validator-service .
 ```
 
 Start container
