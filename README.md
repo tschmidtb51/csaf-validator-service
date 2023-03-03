@@ -79,6 +79,17 @@ You need at least **Node.js version 16 or higher**. [Nodesource](https://github.
 
 [(back to top)](#bsi-secvisogram-csaf-validator-service)
 
+### Generate documentation
+
+The server needs to be running and the [`openapi-generator-cli`](https://openapi-generator.tech/docs/installation/) must be installed. The file `backend/lib/app.js` needs to reflect the target version. Then, you can use the following commands to generate the documentation:
+
+```sh
+openapi-generator-cli generate -i http://localhost:8082/docs/json -g html -o ./documents/generated/html/
+openapi-generator-cli generate -i http://localhost:8082/docs/json -g asciidoc -o ./documents/generated/asciidoc/
+```
+
+[(back to top)](#bsi-secvisogram-csaf-validator-service)
+
 ## Testing
 
 Many tests are integration tests which need a running server. So make sure to start it before running the tests:
