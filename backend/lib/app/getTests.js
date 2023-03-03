@@ -5,7 +5,7 @@ import * as informativeTests from '../../../csaf-validator-lib/informativeTests.
 
 const swaggerInfo = {
   description:
-    'This endpoint is intended to be used to discover all available tests.',
+    'This endpoint is intended to be used to discover all available tests. For each tests it lists the name as well as the preset the test belongs to.',
   summary: 'Retrieve all tests.',
 }
 
