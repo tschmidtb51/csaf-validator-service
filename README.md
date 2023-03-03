@@ -106,7 +106,7 @@ docker build -t csaf/validator-service .
 Start container
 
 ```sh
-docker run -d -p 8082:8082 --name csaf-validator-service csaf/validator-service:1.0.0
+docker run -d -p 8082:8082 --name csaf-validator-service csaf/validator-service
 ```
 
 ## Contributing
