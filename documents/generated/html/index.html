@@ -183,10 +183,10 @@ font-style: italic;
     <div class="app-desc">This is a service to validate documents against the CSAF standard.</div>
     <div class="app-desc">More information: <a href="https://github.com/secvisogram/csaf-validator-service">https://github.com/secvisogram/csaf-validator-service</a></div>
     <div class="app-desc">Contact Info: <a href="secvisogram@bsi.bund.de">secvisogram@bsi.bund.de</a></div>
-    <div class="app-desc">Version: 1.0.0</div>
+    <div class="app-desc">Version: 1.3.1</div>
     <div class="app-desc">BasePath:</div>
     <div class="license-info">MIT</div>
-    <div class="license-url">https://spdx.org/licenses/MIT.html</div>
+    <div class="license-url">https://github.com/secvisogram/csaf-validator-service/blob/main/LICENSE</div>
   <h2>Access</h2>
 
   <h2><a name="__Methods">Methods</a></h2>
@@ -206,7 +206,7 @@ font-style: italic;
     <a class="up" href="#__Methods">Up</a>
     <pre class="get"><code class="huge"><span class="http-method">get</span> /api/v1/tests</code></pre></div>
     <div class="method-summary">Retrieve all tests. (<span class="nickname">apiV1TestsGet</span>)</div>
-    <div class="method-notes">This endpoint is intended to be used to discover all available tests.</div>
+    <div class="method-notes">This endpoint is intended to be used to discover all available tests. For each tests it lists the name as well as the preset the test belongs to.</div>
 
 
 
@@ -216,7 +216,7 @@ font-style: italic;
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      array[<a href="#inline_response_200">inline_response_200</a>]
+      array[<a href="#_api_v1_tests_get_200_response_inner">_api_v1_tests_get_200_response_inner</a>]
       
     </div>
 
@@ -224,10 +224,13 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
+    <pre class="example"><code>[ {
   "name" : "name",
   "preset" : "preset"
-}</code></pre>
+}, {
+  "name" : "name",
+  "preset" : "preset"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -247,7 +250,7 @@ font-style: italic;
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /api/v1/validate</code></pre></div>
     <div class="method-summary">Validate document. (<span class="nickname">apiV1ValidatePost</span>)</div>
-    <div class="method-notes">This endpoint is intended to validate a document against the specified tests.</div>
+    <div class="method-notes">This endpoint is intended to validate a document against the specified tests. In the list of tests provide at least one object, where each object is used to run either a single test or an entire preset. For 'name' provide the test's or the preset's name, and as 'type' provide accordingly either 'test' or 'preset'. For the value of the property 'document' just provide the json of your CSAF document.</div>
 
 
     <h3 class="field-label">Consumes</h3>
@@ -258,7 +261,7 @@ font-style: italic;
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">inline_object <a href="#inline_object">inline_object</a> (required)</div>
+      <div class="param">_api_v1_validate_post_request <a href="#_api_v1_validate_post_request">_api_v1_validate_post_request</a> (required)</div>
 
       <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
 
@@ -269,7 +272,7 @@ font-style: italic;
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      <a href="#inline_response_200_1">inline_response_200_1</a>
+      <a href="#_api_v1_validate_post_200_response">_api_v1_validate_post_200_response</a>
       
     </div>
 
@@ -340,7 +343,7 @@ font-style: italic;
     <h3 class="field-label">Responses</h3>
     <h4 class="field-label">200</h4>
     Default Response
-        <a href="#inline_response_200_1">inline_response_200_1</a>
+        <a href="#_api_v1_validate_post_200_response">_api_v1_validate_post_200_response</a>
   </div> <!-- method -->
   <hr/>
 
@@ -349,35 +352,19 @@ font-style: italic;
 
   <h3>Table of Contents</h3>
   <ol>
-    <li><a href="#_api_v1_validate_tests"><code>_api_v1_validate_tests</code> - </a></li>
-    <li><a href="#inline_object"><code>inline_object</code> - </a></li>
-    <li><a href="#inline_response_200"><code>inline_response_200</code> - </a></li>
-    <li><a href="#inline_response_200_1"><code>inline_response_200_1</code> - </a></li>
-    <li><a href="#inline_response_200_1_errors"><code>inline_response_200_1_errors</code> - </a></li>
-    <li><a href="#inline_response_200_1_infos"><code>inline_response_200_1_infos</code> - </a></li>
-    <li><a href="#inline_response_200_1_tests"><code>inline_response_200_1_tests</code> - </a></li>
+    <li><a href="#_api_v1_tests_get_200_response_inner"><code>_api_v1_tests_get_200_response_inner</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_200_response"><code>_api_v1_validate_post_200_response</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_200_response_tests_inner"><code>_api_v1_validate_post_200_response_tests_inner</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_200_response_tests_inner_errors_inner"><code>_api_v1_validate_post_200_response_tests_inner_errors_inner</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_200_response_tests_inner_infos_inner"><code>_api_v1_validate_post_200_response_tests_inner_infos_inner</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_request"><code>_api_v1_validate_post_request</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_request_tests_inner"><code>_api_v1_validate_post_request_tests_inner</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_request_tests_inner_oneOf"><code>_api_v1_validate_post_request_tests_inner_oneOf</code> - </a></li>
+    <li><a href="#_api_v1_validate_post_request_tests_inner_oneOf_1"><code>_api_v1_validate_post_request_tests_inner_oneOf_1</code> - </a></li>
   </ol>
 
   <div class="model">
-    <h3><a name="_api_v1_validate_tests"><code>_api_v1_validate_tests</code> - </a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'></div>
-    <div class="field-items">
-      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-        <div class="param-enum-header">Enum:</div>
-        <div class="param-enum">preset</div><div class="param-enum">test</div>
-    </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="inline_object"><code>inline_object</code> - </a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'></div>
-    <div class="field-items">
-      <div class="param">tests </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_tests">array[_api_v1_validate_tests]</a></span>  </div>
-<div class="param">document </div><div class="param-desc"><span class="param-type"><a href="#object">map[String, Object]</a></span>  </div>
-    </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="inline_response_200"><code>inline_response_200</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="_api_v1_tests_get_200_response_inner"><code>_api_v1_tests_get_200_response_inner</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -385,15 +372,26 @@ font-style: italic;
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="inline_response_200_1"><code>inline_response_200_1</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="_api_v1_validate_post_200_response"><code>_api_v1_validate_post_200_response</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">isValid </div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
-<div class="param">tests </div><div class="param-desc"><span class="param-type"><a href="#inline_response_200_1_tests">array[inline_response_200_1_tests]</a></span>  </div>
+<div class="param">tests </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_post_200_response_tests_inner">array[_api_v1_validate_post_200_response_tests_inner]</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="inline_response_200_1_errors"><code>inline_response_200_1_errors</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="_api_v1_validate_post_200_response_tests_inner"><code>_api_v1_validate_post_200_response_tests_inner</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">errors </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_post_200_response_tests_inner_errors_inner">array[_api_v1_validate_post_200_response_tests_inner_errors_inner]</a></span>  </div>
+<div class="param">infos </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_post_200_response_tests_inner_infos_inner">array[_api_v1_validate_post_200_response_tests_inner_infos_inner]</a></span>  </div>
+<div class="param">warnings </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_post_200_response_tests_inner_infos_inner">array[_api_v1_validate_post_200_response_tests_inner_infos_inner]</a></span>  </div>
+<div class="param">isValid </div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="_api_v1_validate_post_200_response_tests_inner_errors_inner"><code>_api_v1_validate_post_200_response_tests_inner_errors_inner</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">instancePath </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -401,7 +399,7 @@ font-style: italic;
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="inline_response_200_1_infos"><code>inline_response_200_1_infos</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="_api_v1_validate_post_200_response_tests_inner_infos_inner"><code>_api_v1_validate_post_200_response_tests_inner_infos_inner</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">instancePath </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -409,14 +407,47 @@ font-style: italic;
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="inline_response_200_1_tests"><code>inline_response_200_1_tests</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="_api_v1_validate_post_request"><code>_api_v1_validate_post_request</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
-      <div class="param">errors </div><div class="param-desc"><span class="param-type"><a href="#inline_response_200_1_errors">array[inline_response_200_1_errors]</a></span>  </div>
-<div class="param">infos </div><div class="param-desc"><span class="param-type"><a href="#inline_response_200_1_infos">array[inline_response_200_1_infos]</a></span>  </div>
-<div class="param">warnings </div><div class="param-desc"><span class="param-type"><a href="#inline_response_200_1_infos">array[inline_response_200_1_infos]</a></span>  </div>
-<div class="param">isValid </div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
-<div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+      <div class="param">tests </div><div class="param-desc"><span class="param-type"><a href="#_api_v1_validate_post_request_tests_inner">array[_api_v1_validate_post_request_tests_inner]</a></span>  </div>
+<div class="param">document </div><div class="param-desc"><span class="param-type"><a href="#AnyType">map[String, oas_any_type_not_mapped]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="_api_v1_validate_post_request_tests_inner"><code>_api_v1_validate_post_request_tests_inner</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">schema</div><div class="param-enum">mandatory</div><div class="param-enum">optional</div><div class="param-enum">informative</div><div class="param-enum">basic</div><div class="param-enum">extended</div><div class="param-enum">full</div>
+<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">preset</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="_api_v1_validate_post_request_tests_inner_oneOf"><code>_api_v1_validate_post_request_tests_inner_oneOf</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">csaf_2_0</div><div class="param-enum">csaf_2_0_strict</div><div class="param-enum">mandatoryTest_6_1_1</div><div class="param-enum">mandatoryTest_6_1_10</div><div class="param-enum">mandatoryTest_6_1_11</div><div class="param-enum">mandatoryTest_6_1_12</div><div class="param-enum">mandatoryTest_6_1_13</div><div class="param-enum">mandatoryTest_6_1_14</div><div class="param-enum">mandatoryTest_6_1_15</div><div class="param-enum">mandatoryTest_6_1_16</div><div class="param-enum">mandatoryTest_6_1_17</div><div class="param-enum">mandatoryTest_6_1_18</div><div class="param-enum">mandatoryTest_6_1_19</div><div class="param-enum">mandatoryTest_6_1_2</div><div class="param-enum">mandatoryTest_6_1_20</div><div class="param-enum">mandatoryTest_6_1_21</div><div class="param-enum">mandatoryTest_6_1_22</div><div class="param-enum">mandatoryTest_6_1_23</div><div class="param-enum">mandatoryTest_6_1_24</div><div class="param-enum">mandatoryTest_6_1_25</div><div class="param-enum">mandatoryTest_6_1_26</div><div class="param-enum">mandatoryTest_6_1_27_1</div><div class="param-enum">mandatoryTest_6_1_27_10</div><div class="param-enum">mandatoryTest_6_1_27_11</div><div class="param-enum">mandatoryTest_6_1_27_2</div><div class="param-enum">mandatoryTest_6_1_27_3</div><div class="param-enum">mandatoryTest_6_1_27_4</div><div class="param-enum">mandatoryTest_6_1_27_5</div><div class="param-enum">mandatoryTest_6_1_27_6</div><div class="param-enum">mandatoryTest_6_1_27_7</div><div class="param-enum">mandatoryTest_6_1_27_8</div><div class="param-enum">mandatoryTest_6_1_27_9</div><div class="param-enum">mandatoryTest_6_1_28</div><div class="param-enum">mandatoryTest_6_1_29</div><div class="param-enum">mandatoryTest_6_1_3</div><div class="param-enum">mandatoryTest_6_1_30</div><div class="param-enum">mandatoryTest_6_1_31</div><div class="param-enum">mandatoryTest_6_1_32</div><div class="param-enum">mandatoryTest_6_1_33</div><div class="param-enum">mandatoryTest_6_1_4</div><div class="param-enum">mandatoryTest_6_1_5</div><div class="param-enum">mandatoryTest_6_1_6</div><div class="param-enum">mandatoryTest_6_1_7</div><div class="param-enum">mandatoryTest_6_1_8</div><div class="param-enum">mandatoryTest_6_1_9</div><div class="param-enum">optionalTest_6_2_1</div><div class="param-enum">optionalTest_6_2_10</div><div class="param-enum">optionalTest_6_2_11</div><div class="param-enum">optionalTest_6_2_12</div><div class="param-enum">optionalTest_6_2_13</div><div class="param-enum">optionalTest_6_2_14</div><div class="param-enum">optionalTest_6_2_15</div><div class="param-enum">optionalTest_6_2_16</div><div class="param-enum">optionalTest_6_2_17</div><div class="param-enum">optionalTest_6_2_18</div><div class="param-enum">optionalTest_6_2_19</div><div class="param-enum">optionalTest_6_2_2</div><div class="param-enum">optionalTest_6_2_20</div><div class="param-enum">optionalTest_6_2_3</div><div class="param-enum">optionalTest_6_2_4</div><div class="param-enum">optionalTest_6_2_5</div><div class="param-enum">optionalTest_6_2_6</div><div class="param-enum">optionalTest_6_2_7</div><div class="param-enum">optionalTest_6_2_8</div><div class="param-enum">optionalTest_6_2_9</div><div class="param-enum">informativeTest_6_3_1</div><div class="param-enum">informativeTest_6_3_10</div><div class="param-enum">informativeTest_6_3_11</div><div class="param-enum">informativeTest_6_3_2</div><div class="param-enum">informativeTest_6_3_3</div><div class="param-enum">informativeTest_6_3_4</div><div class="param-enum">informativeTest_6_3_5</div><div class="param-enum">informativeTest_6_3_6</div><div class="param-enum">informativeTest_6_3_7</div><div class="param-enum">informativeTest_6_3_8</div><div class="param-enum">informativeTest_6_3_9</div>
+<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">test</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="_api_v1_validate_post_request_tests_inner_oneOf_1"><code>_api_v1_validate_post_request_tests_inner_oneOf_1</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">schema</div><div class="param-enum">mandatory</div><div class="param-enum">optional</div><div class="param-enum">informative</div><div class="param-enum">basic</div><div class="param-enum">extended</div><div class="param-enum">full</div>
+<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">preset</div>
     </div>  <!-- field-items -->
   </div>
   </body>
