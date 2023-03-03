@@ -42,7 +42,7 @@ for more information.
 
 ## Documentation
 
-The documentation is available as a swagger resource provided by the service itself under `/docs`. So once the server is running, visit [http://localhost:&lt;config port&gt;/docs](http://localhost:3000/docs) in your browser. The default port of the application `3000`. See [configuration](#configuration) to learn about ways to change it.
+The documentation is available as a swagger resource provided by the service itself under `/docs`. So once the server is running, visit [http://localhost:&lt;config port&gt;/docs](http://localhost:8082/docs) in your browser. The default port of the application `8082`. See [configuration](#configuration) to learn about ways to change it.
 
 [(back to top)](#bsi-secvisogram-csaf-validator-service)
 
