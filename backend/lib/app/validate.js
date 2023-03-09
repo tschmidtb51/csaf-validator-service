@@ -5,9 +5,9 @@ import * as informativeTests from '../../../csaf-validator-lib/informativeTests.
 import * as basic from '../../../csaf-validator-lib/basic.js'
 import * as extended from '../../../csaf-validator-lib/extended.js'
 import * as full from '../../../csaf-validator-lib/full.js'
-import validate from '../../../csaf-validator-lib/validate.js'
+import validateStrict from '../../../csaf-validator-lib/validateStrict.js'
 
-/** @type {Record<string, Parameters<typeof validate>[0][number] | undefined>} */
+/** @type {Record<string, Parameters<typeof validateStrict>[0][number] | undefined>} */
 const tests = Object.fromEntries(
   /** @type {Array<[string, any]>} */ (Object.entries(schemaTests))
     .concat(Object.entries(mandatoryTests))
@@ -15,7 +15,7 @@ const tests = Object.fromEntries(
     .concat(Object.entries(informativeTests))
 )
 
-/** @type {Record<string, Parameters<typeof validate>[0] | undefined>} */
+/** @type {Record<string, Parameters<typeof validateStrict>[0] | undefined>} */
 const presets = {
   schema: Object.values(schemaTests),
   mandatory: Object.values(mandatoryTests),
@@ -26,7 +26,7 @@ const presets = {
   full: Object.values(full),
 }
 
-/** @typedef {Parameters<typeof validate>[0][number]} DocumentTest */
+/** @typedef {Parameters<typeof validateStrict>[0][number]} DocumentTest */
 
 const swaggerInfo = {
   description:
@@ -146,7 +146,7 @@ export default async function (fastify) {
       const requestBody =
         /** @type {import('./validate/types.js').RequestBody} */ (request.body)
 
-      const results = await validate(
+      return await validateStrict(
         requestBody.tests
           .flatMap((t) =>
             t.type === 'preset'
@@ -164,8 +164,6 @@ export default async function (fastify) {
           ),
         requestBody.document
       )
-
-      return results
     }
   )
 }
