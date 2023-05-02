@@ -1,3 +1,4 @@
 /node_modules
 /dist
 openapitools.json
+backend/test-results.json
