@@ -93,7 +93,7 @@ const responseSchema = {
               },
             },
           },
-          infos: {
+          warnings: {
             type: 'array',
             items: {
               type: 'object',
@@ -104,7 +104,7 @@ const responseSchema = {
               },
             },
           },
-          warnings: {
+          infos: {
             type: 'array',
             items: {
               type: 'object',
