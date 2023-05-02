@@ -7,7 +7,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - run: sudo apt-get install hunspell
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -19,11 +22,15 @@ jobs:
           timeout: 30000
           resource: tcp:localhost:8082
       - run: npm run test-report
-      - name: Test Report
-        uses: phoenix-actions/test-reporting@v12
-        id: test-report
+      - name: Save PR number
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          echo $PR_NUMBER > ./pr_number
+      - uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: Mocha Tests
-          path: backend/test-results.json
-          reporter: mocha-json
+          name: test-results
+          path: |
+            backend/test-results.json
+            pr_number
