@@ -1,6 +1,6 @@
 = CSAF Validator Service
 secvisogram@bsi.bund.de
-1.3.1
+1.3.3
 :toc: left
 :numbered:
 :toclevels: 3
@@ -249,15 +249,15 @@ endif::internal-generation[]
 | 
 |  
 
-| infos
+| warnings
 | X
-| List  of <<_api_v1_validate_post_200_response_tests_inner_infos_inner>>
+| List  of <<_api_v1_validate_post_200_response_tests_inner_warnings_inner>>
 | 
 |  
 
-| warnings
+| infos
 | X
-| List  of <<_api_v1_validate_post_200_response_tests_inner_infos_inner>>
+| List  of <<_api_v1_validate_post_200_response_tests_inner_warnings_inner>>
 | 
 |  
 
@@ -301,12 +301,12 @@ endif::internal-generation[]
 |===
 
 
-[#ApiV1ValidatePost200ResponseTestsInnerInfosInner]
-=== _ApiV1ValidatePost200ResponseTestsInnerInfosInner_ 
+[#ApiV1ValidatePost200ResponseTestsInnerWarningsInner]
+=== _ApiV1ValidatePost200ResponseTestsInnerWarningsInner_ 
 
 
 
-[.fields-ApiV1ValidatePost200ResponseTestsInnerInfosInner]
+[.fields-ApiV1ValidatePost200ResponseTestsInnerWarningsInner]
 [cols="2,1,2,4,1"]
 |===
 | Field Name| Required| Type| Description| Format
