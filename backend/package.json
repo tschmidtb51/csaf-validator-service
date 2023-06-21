@@ -9,20 +9,20 @@
   },
   "dependencies": {
     "@fastify/cors": "^7.0.0",
-    "close-with-grace": "^1.1.0",
+    "close-with-grace": "^1.2.0",
     "config": "^3.3.8",
     "fastify": "^3.29.4",
     "fastify-swagger": "~5.1.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
+    "@types/chai": "^4.3.5",
     "@types/config": "^3.3.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.17",
+    "@types/node": "^18.16.16",
     "ajv": "^8.11.2",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
-    "nodemon": "^2.0.20",
-    "undici": "^5.14.0"
+    "nodemon": "^2.0.22",
+    "undici": "^5.22.1"
   }
 }
