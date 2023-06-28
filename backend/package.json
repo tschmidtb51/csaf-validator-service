@@ -8,6 +8,7 @@
     "dev": "nodemon -w \"*.js\" -w \"lib/**/*\" server.js"
   },
   "dependencies": {
+    "@fastify/cors": "^7.0.0",
     "close-with-grace": "^1.2.0",
     "config": "^3.3.8",
     "fastify": "^3.29.4",

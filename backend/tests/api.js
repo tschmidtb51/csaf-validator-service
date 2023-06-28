@@ -71,6 +71,40 @@ describe('API', function () {
     })
   })
 
+  describe('OPTIONS /api/v1/tests', function () {
+    it('returns valid CORS information', async function () {
+          const res = await request(
+            'http://localhost:' + getConfig().port + '/api/v1/tests',
+            {
+              method: 'OPTIONS',
+              headers: {
+                'Origin': 'http://localhost',
+                'Access-Control-Request-Method': 'GET',
+                'Access-Control-Request-Headers': 'content-type'
+              }
+            }
+          )
+          expect(res.statusCode).to.equal(204)
+    })
+  })
+
+  describe('OPTIONS /api/v1/validate', function () {
+    it('returns valid CORS information', async function () {
+          const res = await request(
+            'http://localhost:' + getConfig().port + '/api/v1/validate',
+            {
+              method: 'OPTIONS',
+              headers: {
+                'Origin': 'http://localhost',
+                'Access-Control-Request-Method': 'POST',
+                'Access-Control-Request-Headers': 'content-type'
+              }
+            }
+          )
+          expect(res.statusCode).to.equal(204)
+    })
+  })
+
   describe('POST /api/v1/validate', function () {
     describe('documents can be checked using presets and single tests', function () {
       for (let i = 0; i < getValidSampleDocuments().length; ++i) {

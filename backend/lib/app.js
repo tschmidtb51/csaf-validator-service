@@ -40,4 +40,7 @@ export default async function (fastify) {
       )
     }
   )
+  fastify.register(import('@fastify/cors'), {
+    // customize here
+  })
 }
