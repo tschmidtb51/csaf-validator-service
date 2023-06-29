@@ -3,13 +3,13 @@ import { getHunspellAvailableLangs } from '../../csaf-validator-lib/hunspell.js'
 /**
  * @param {import('fastify').FastifyInstance} fastify
  */
-export default async function (fastify) {
+export default async function(fastify) {
   fastify.register(import('fastify-swagger'), {
     routePrefix: '/docs',
     openapi: {
       info: {
         title: 'CSAF Validator Service',
-        version: '1.3.6',
+        version: '1.3.7',
         description:
           'This is a service to validate documents against the CSAF standard.',
         contact: {
@@ -31,7 +31,7 @@ export default async function (fastify) {
     (availableLangs) => {
       fastify.log.info(
         'Installation of hunspell found! Available languages: ' +
-          availableLangs.join(', ')
+        availableLangs.join(', ')
       )
     },
     () => {
